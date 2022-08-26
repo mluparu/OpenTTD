@@ -354,6 +354,7 @@ Vehicle::Vehicle(VehicleType type)
 	this->cargo_age_counter  = 1;
 	this->last_station_visited = INVALID_STATION;
 	this->last_loading_station = INVALID_STATION;
+	this->sign = new ViewportSign();
 }
 
 /**
@@ -897,6 +898,9 @@ Vehicle::~Vehicle()
 	UpdateVehicleViewportHash(this, INVALID_COORD, 0, this->sprite_cache.old_coord.left, this->sprite_cache.old_coord.top);
 	DeleteVehicleNews(this->index, INVALID_STRING_ID);
 	DeleteNewGRFInspectWindow(GetGrfSpecFeature(this->type), this->index);
+
+	sign->MarkDirty();
+	delete sign;
 }
 
 /**
@@ -1115,6 +1119,17 @@ static void DoDrawVehicle(const Vehicle *v)
 	EndSpriteCombine();
 }
 
+void ViewportAddVehicleSign(DrawPixelInfo* dpi, const Vehicle* v)
+{
+	if (!v->IsPrimaryVehicle()) return;
+
+	if (!HasBit(_display_opt, DO_SHOW_COMPETITOR_SIGNS) && _local_company != v->owner && v->owner != OWNER_NONE) return;
+
+	ViewportAddString(dpi, ZOOM_LVL_OUT_16X, v->sign, 
+		STR_VEHICLE_NAME, STR_VEHICLE_NAME, STR_NULL, v->index, 0,
+		(v->owner == OWNER_NONE) ? COLOUR_GREY : (v->owner == OWNER_DEITY ? INVALID_COLOUR : _company_colours[v->owner]));
+}
+
 /**
  * Add the vehicle sprites that should be drawn at a part of the screen.
  * @param dpi Rectangle being drawn.
@@ -1196,6 +1211,7 @@ void ViewportAddVehicles(DrawPixelInfo *dpi)
 						b >= v->coord.top) DoDrawVehicle(v);
 				}
 
+				ViewportAddVehicleSign(dpi, v);
 				v = v->hash_viewport_next;
 			}
 
@@ -1204,6 +1220,18 @@ void ViewportAddVehicles(DrawPixelInfo *dpi)
 
 		if (y == yu) break;
 	}
+}
+
+void Vehicle::UpdateSignVirtCoord()
+{
+	Point pt = RemapCoords2(this->x_pos + this->x_offs, this->y_pos + this->y_offs);
+
+	pt.y -= 32 * ZOOM_LVL_BASE;
+
+	SetDParam(0, this->index);
+	this->sign->UpdatePosition(pt.x, pt.y, STR_VEHICLE_NAME);
+
+	SetWindowDirty(WC_VEHICLE_DETAILS, this->index);
 }
 
 /**
@@ -1673,6 +1701,8 @@ void Vehicle::UpdateViewport(bool dirty)
 				std::max(this->sprite_cache.old_coord.bottom, this->coord.bottom));
 		}
 	}
+
+	UpdateSignVirtCoord();
 }
 
 /**

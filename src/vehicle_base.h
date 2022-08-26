@@ -23,6 +23,7 @@
 #include "base_consist.h"
 #include "network/network.h"
 #include "saveload/saveload.h"
+#include "viewport_type.h"
 #include <list>
 #include <map>
 
@@ -344,6 +345,9 @@ public:
 	VehicleCache vcache;                ///< Cache of often used vehicle values.
 
 	mutable MutableSpriteCache sprite_cache; ///< Cache of sprites and values related to recalculating them, see #MutableSpriteCache
+
+	ViewportSign* sign;
+	void UpdateSignVirtCoord();
 
 	Vehicle(VehicleType type = VEH_INVALID);
 
