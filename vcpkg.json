@@ -5,6 +5,14 @@
         "zlib",
         "libpng",
         "liblzma",
-        "lzo"
+        "lzo",
+        {
+            "name": "freetype",
+            "platform": "linux"
+        },
+        {
+            "name": "fontconfig",
+            "platform": "linux"
+        }
     ]
 }
