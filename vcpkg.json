@@ -1,0 +1,10 @@
+{
+    "name": "openttd",
+    "version": "1.0",
+    "dependencies": [
+        "zlib",
+        "libpng",
+        "liblzma",
+        "lzo"
+    ]
+}
