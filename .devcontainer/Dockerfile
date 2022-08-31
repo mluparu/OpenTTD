@@ -20,10 +20,13 @@ RUN if [ "${REINSTALL_CMAKE_VERSION_FROM_SOURCE}" != "none" ]; then \
 
 # [Optional] Uncomment this section to install additional packages.
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends libpng-dev \
+    && apt-get -y install --no-install-recommends \
+    liblzo2-dev \
+    libpng-dev \
     zlib1g-dev \
     liblzma-dev \
     libsdl2-dev \
     libfreetype-dev \
     libfontconfig1-dev \
-    libicu-dev
+    libicu-dev \
+    bison
