@@ -1234,6 +1234,10 @@ void Vehicle::UpdateSignVirtCoord()
 	SetWindowDirty(WC_VEHICLE_DETAILS, this->index);
 }
 
+bool Vehicle::UpdateSignVirtCoord(bool check)
+{
+}
+
 /**
  * Find the vehicle close to the clicked coordinates.
  * @param vp Viewport clicked in.
