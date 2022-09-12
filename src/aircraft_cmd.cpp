@@ -126,7 +126,7 @@ static StationID FindNearestHangar(const Aircraft *v)
 	TileIndex vtile = TileVirtXY(v->x_pos, v->y_pos);
 	const AircraftVehicleInfo *avi = AircraftVehInfo(v->engine_type);
 	uint max_range = v->acache.cached_max_range_sqr;
-
+	
 	/* Determine destinations where it's coming from and where it's heading to */
 	const Station *last_dest = nullptr;
 	const Station *next_dest = nullptr;
